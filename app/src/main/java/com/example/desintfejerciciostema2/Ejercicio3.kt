@@ -25,6 +25,7 @@ class Ejercicio3 : AppCompatActivity() {
     private lateinit var fecha: TextInputEditText
     private lateinit var fechaLayout: TextInputLayout
     private lateinit var boton: Button
+    private var fechaenmilisegundos: Long = 0
 
 
     @SuppressLint("MissingInflatedId")
@@ -54,6 +55,7 @@ class Ejercicio3 : AppCompatActivity() {
 
             picker.addOnPositiveButtonClickListener {
                 fecha.setText(picker.headerText)
+                fechaenmilisegundos = picker.selection ?: 0
             }
             picker.show(supportFragmentManager, picker.toString())
         }
@@ -111,11 +113,10 @@ class Ejercicio3 : AppCompatActivity() {
             }
             //La fecha debe ser menor a 18 años antes que hoy
             if (fecha.text.toString().isNotEmpty()) {
-                val fechaNacimiento = fecha.text.toString()
+                val fechaNacimiento = fechaenmilisegundos
                 val fechaActual = System.currentTimeMillis()
-                val fechaNacimientoMillis = fechaNacimiento.toLong()
-                val edad = (fechaActual - fechaNacimientoMillis) / (1000 * 60 * 60 * 24 * 365)
-                if (edad < 18) {
+                val edad = (fechaActual - fechaNacimiento) / (1000 * 60 * 60 * 24 * 365)
+                if (edad > 18) {
                     fechaLayout.error = null
                     fechaLayout.boxStrokeColor = getColor(R.color.green)
                     fechaLayout.defaultHintTextColor = getColorStateList(R.color.green)
